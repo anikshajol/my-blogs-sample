@@ -1,7 +1,8 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import "./App.css";
 import Blogs from "./Components/Blogs/Blogs";
 import Navbar from "./Components/Navbar/Navbar";
+import { getFromLocalStorage } from "../localstorage";
 
 function App() {
   const [bookmarks, setBookmarks] = useState([]);
@@ -28,6 +29,14 @@ function App() {
       }
     });
   };
+
+  useEffect(() => {
+    const stored = getFromLocalStorage();
+    console.log(stored);
+    if (stored) {
+      setBookmarks(stored);
+    }
+  }, []);
 
   const handleRemoveFromBookmarked = (id) => {
     console.log("hello", id);

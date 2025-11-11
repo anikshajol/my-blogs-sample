@@ -1,21 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaBookmark } from "react-icons/fa";
+import {
+  addToLocalStorage,
+  getFromLocalStorage,
+  removeFromLocalStorage,
+} from "../../../localstorage";
 
 const Blog = ({ blog, handleAddBookmark, handleRemoveFromBookmarked }) => {
   const { author, hashtags, cover, title, author_img } = blog;
 
   const [bookmarked, isBookmarked] = useState(false);
+  useEffect(() => {
+    const stored = getFromLocalStorage();
+    const found = stored.find((store) => store.id === blog.id);
+    if (found) {
+      isBookmarked(true);
+    }
+  }, [blog.id]);
 
   const handleBookMark = () => {
     const newBookMark = !bookmarked;
     isBookmarked(newBookMark);
     handleAddBookmark(blog, newBookMark);
+    addToLocalStorage(blog, newBookMark);
   };
 
   const handleRemoveBookmarked = () => {
     const newBookMark = !bookmarked;
     isBookmarked(newBookMark);
     handleRemoveFromBookmarked(blog.id, newBookMark);
+    removeFromLocalStorage(blog.id, newBookMark);
   };
 
   return (
